@@ -52,6 +52,7 @@ export default function Sidebar({ topics, selectedTopicId, onSelectTopic }) {
               <div
                 key={topic.id}
                 onClick={() => onSelectTopic(topic.id)}
+                style={{ touchAction: 'manipulation' }}
                 className={`group flex items-center px-4 py-2.5 cursor-pointer transition-colors ${
                   isSelected
                     ? 'bg-blue-600 text-white'
