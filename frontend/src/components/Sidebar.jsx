@@ -35,7 +35,7 @@ export default function Sidebar({ topics, selectedTopicId, onSelectTopic }) {
       <aside className="w-64 bg-gray-900 text-white flex flex-col h-full flex-shrink-0">
         {/* Header */}
         <div className="px-5 py-5 border-b border-gray-700">
-          <h1 className="text-lg font-bold text-white tracking-tight">DSA Tracker</h1>
+          <h1 className="text-lg font-bold text-white tracking-tight">AeiRo DSA Space</h1>
           <p className="text-xs text-gray-400 mt-0.5">{topics.length} topics</p>
         </div>
 
