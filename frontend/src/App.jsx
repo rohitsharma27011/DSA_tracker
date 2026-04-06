@@ -4,10 +4,46 @@ import Sidebar from './components/Sidebar.jsx';
 import TopicView from './components/TopicView.jsx';
 import OverallProgress from './components/OverallProgress.jsx';
 import client from './api/client.js';
+import { useTheme } from './contexts/ThemeContext.jsx';
+
+function ThemeToggle() {
+  const { isDark, toggle, t } = useTheme();
+  return (
+    <button
+      onClick={toggle}
+      className="flex-shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-full transition-all duration-300"
+      style={{
+        background: isDark ? 'rgba(124,58,237,0.15)' : 'rgba(124,58,237,0.1)',
+        border: `1px solid ${isDark ? 'rgba(124,58,237,0.3)' : 'rgba(124,58,237,0.25)'}`,
+      }}
+      title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+    >
+      {/* Track */}
+      <div
+        className="relative w-9 h-5 rounded-full transition-all duration-300 flex-shrink-0"
+        style={{ background: isDark ? 'rgba(124,58,237,0.4)' : 'rgba(124,58,237,0.25)' }}
+      >
+        <div
+          className="absolute top-0.5 w-4 h-4 rounded-full transition-all duration-300"
+          style={{
+            left: isDark ? '18px' : '2px',
+            background: 'linear-gradient(135deg, #7c3aed, #a855f7)',
+            boxShadow: '0 1px 4px rgba(124,58,237,0.5)',
+          }}
+        />
+      </div>
+      {/* Icon */}
+      <span className="text-sm leading-none" style={{ color: isDark ? '#a78bfa' : '#7c3aed' }}>
+        {isDark ? '🌙' : '☀️'}
+      </span>
+    </button>
+  );
+}
 
 function App() {
   const [selectedTopicId, setSelectedTopicId] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { t } = useTheme();
 
   const { data: topics = [] } = useQuery({
     queryKey: ['topics'],
@@ -21,40 +57,46 @@ function App() {
 
   const handleSelectTopic = (id) => {
     setSelectedTopicId(id);
-    setSidebarOpen(false); // close drawer on mobile after picking a topic
+    setSidebarOpen(false);
   };
 
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden">
+    <div className="flex h-screen overflow-hidden" style={{ background: t.bg, transition: 'background 0.3s ease' }}>
       {/* Mobile backdrop */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-20 md:hidden"
+          className="fixed inset-0 z-20 md:hidden"
+          style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      {/* Sidebar — drawer on mobile, static on md+ */}
+      {/* Sidebar */}
       <div
         className={`fixed inset-y-0 left-0 z-30 transform transition-transform duration-300 md:relative md:translate-x-0 md:z-auto ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <Sidebar
-          topics={topics}
-          selectedTopicId={effectiveTopicId}
-          onSelectTopic={handleSelectTopic}
-        />
+        <Sidebar topics={topics} selectedTopicId={effectiveTopicId} onSelectTopic={handleSelectTopic} />
       </div>
 
-      {/* Main content */}
+      {/* Main */}
       <main className="flex-1 flex flex-col overflow-hidden min-w-0">
         {/* Top bar */}
-        <div className="px-4 py-3 md:px-6 md:py-4 border-b border-gray-200 bg-white flex items-center gap-3">
+        <div
+          className="px-4 py-3 md:px-6 md:py-4 flex items-center gap-3 flex-shrink-0"
+          style={{
+            background: t.bgTopbar,
+            backdropFilter: 'blur(20px)',
+            borderBottom: `1px solid ${t.borderTopbar}`,
+            transition: 'background 0.3s ease, border-color 0.3s ease',
+          }}
+        >
           {/* Hamburger — mobile only */}
           <button
             onClick={() => setSidebarOpen(true)}
-            className="md:hidden p-1.5 rounded-md text-gray-500 hover:bg-gray-100 transition-colors flex-shrink-0"
+            className="md:hidden p-2 rounded-lg transition-all flex-shrink-0"
+            style={{ background: t.hamburgerBg, color: t.hamburgerColor }}
             aria-label="Open menu"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -64,15 +106,17 @@ function App() {
           <div className="flex-1 min-w-0">
             <OverallProgress topics={topics} />
           </div>
+          <ThemeToggle />
         </div>
 
-        {/* Content area */}
+        {/* Content */}
         <div className="flex-1 overflow-y-auto">
           {effectiveTopicId ? (
             <TopicView topicId={effectiveTopicId} topics={topics} />
           ) : (
-            <div className="flex items-center justify-center h-full text-gray-400 text-sm">
-              <p>Select a topic from the sidebar to get started.</p>
+            <div className="flex flex-col items-center justify-center h-full gap-3">
+              <div className="text-5xl" style={{ opacity: 0.2 }}>✦</div>
+              <p className="text-sm" style={{ color: t.emptyText }}>Select a topic to get started</p>
             </div>
           )}
         </div>

@@ -4,15 +4,24 @@ import client from '../api/client.js';
 import QuestionRow from './QuestionRow.jsx';
 import ProgressBar from './ProgressBar.jsx';
 import AddQuestionModal from './AddQuestionModal.jsx';
+import { useTheme } from '../contexts/ThemeContext.jsx';
 
 const DIFFICULTIES = ['All', 'Easy', 'Medium', 'Hard'];
+
+const DIFF_ACTIVE = {
+  All:    { background: 'linear-gradient(135deg, #4b5563, #374151)', color: '#e2e8f0', border: 'transparent' },
+  Easy:   { background: 'linear-gradient(135deg, rgba(34,197,94,0.25), rgba(22,163,74,0.15))', color: '#4ade80', border: 'rgba(34,197,94,0.4)' },
+  Medium: { background: 'linear-gradient(135deg, rgba(234,179,8,0.25), rgba(202,138,4,0.15))', color: '#facc15', border: 'rgba(234,179,8,0.4)' },
+  Hard:   { background: 'linear-gradient(135deg, rgba(239,68,68,0.25), rgba(185,28,28,0.15))', color: '#f87171', border: 'rgba(239,68,68,0.4)' },
+};
 
 export default function TopicView({ topicId, topics }) {
   const [filter, setFilter] = useState('All');
   const [search, setSearch] = useState('');
   const [showAddQuestion, setShowAddQuestion] = useState(false);
+  const { t } = useTheme();
 
-  const topic = topics.find((t) => t.id === topicId);
+  const topic = topics.find((tp) => tp.id === topicId);
 
   const { data: questions = [], isLoading } = useQuery({
     queryKey: ['questions', topicId],
@@ -32,24 +41,32 @@ export default function TopicView({ topicId, topics }) {
 
   if (!topic) return null;
 
-  const diffColors = {
-    All: 'bg-gray-100 text-gray-700 border-gray-200',
-    Easy: 'bg-green-50 text-green-700 border-green-200',
-    Medium: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-    Hard: 'bg-red-50 text-red-700 border-red-200',
-  };
-
   return (
-    <div className="p-4 md:p-6">
+    <div className="p-4 md:p-6 fade-in-up">
       {/* Topic header */}
-      <div className="mb-5">
-        <div className="flex items-start sm:items-center justify-between gap-3 mb-3">
-          <h2 className="text-xl md:text-2xl font-bold text-gray-800 leading-tight">{topic.name}</h2>
+      <div className="mb-6">
+        <div className="flex items-start sm:items-center justify-between gap-3 mb-4">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-extrabold leading-tight gradient-text">
+              {topic.name}
+            </h2>
+            <p className="text-xs mt-1" style={{ color: t.textMuted }}>
+              {completed} of {questions.length} completed
+            </p>
+          </div>
           <button
             onClick={() => setShowAddQuestion(true)}
-            className="flex-shrink-0 px-3 py-1.5 md:px-4 md:py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors"
+            className="flex-shrink-0 px-4 py-2 text-sm font-semibold rounded-xl transition-all duration-200 flex items-center gap-1.5"
+            style={{
+              background: 'linear-gradient(135deg, #7c3aed, #a855f7)',
+              color: 'white',
+              boxShadow: '0 4px 16px rgba(124,58,237,0.35)',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 4px 24px rgba(124,58,237,0.55)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 4px 16px rgba(124,58,237,0.35)'; e.currentTarget.style.transform = 'translateY(0)'; }}
           >
-            + Add Question
+            <span className="text-base leading-none">+</span>
+            Add Question
           </button>
         </div>
         <ProgressBar completed={completed} total={questions.length} />
@@ -58,59 +75,77 @@ export default function TopicView({ topicId, topics }) {
       {/* Filters & Search */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-5">
         <div className="flex flex-wrap gap-1.5">
-          {DIFFICULTIES.map((d) => (
-            <button
-              key={d}
-              onClick={() => setFilter(d)}
-              className={`px-3 py-1 text-xs font-medium rounded-full border transition-colors ${
-                filter === d
-                  ? d === 'All'
-                    ? 'bg-gray-800 text-white border-gray-800'
-                    : d === 'Easy'
-                    ? 'bg-green-500 text-white border-green-500'
-                    : d === 'Medium'
-                    ? 'bg-yellow-500 text-white border-yellow-500'
-                    : 'bg-red-500 text-white border-red-500'
-                  : diffColors[d]
-              }`}
-            >
-              {d}
-            </button>
-          ))}
+          {DIFFICULTIES.map((d) => {
+            const active = filter === d;
+            const s = active ? DIFF_ACTIVE[d] : null;
+            return (
+              <button
+                key={d}
+                onClick={() => setFilter(d)}
+                className="px-3 py-1.5 text-xs font-semibold rounded-full transition-all duration-200"
+                style={{
+                  background: active ? s.background : t.bgInactiveFilter,
+                  color: active ? s.color : t.textSecondary,
+                  border: `1px solid ${active ? s.border : t.border}`,
+                  boxShadow: active && d !== 'All' ? `0 0 10px ${s.border}` : 'none',
+                }}
+              >
+                {d}
+              </button>
+            );
+          })}
         </div>
-        <input
-          type="text"
-          placeholder="Search questions..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full sm:w-auto sm:ml-auto px-3 py-1.5 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        />
+        <div className="w-full sm:w-auto sm:ml-auto relative">
+          <input
+            type="text"
+            placeholder="Search questions..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full sm:w-56 pl-8 pr-3 py-1.5 text-sm rounded-xl focus:outline-none transition-all"
+            style={{
+              background: t.bgInput,
+              border: `1px solid ${t.borderInput}`,
+              color: t.textPrimary,
+            }}
+            onFocus={(e) => { e.target.style.border = '1px solid rgba(124,58,237,0.5)'; e.target.style.boxShadow = '0 0 0 3px rgba(124,58,237,0.12)'; }}
+            onBlur={(e) => { e.target.style.border = `1px solid ${t.borderInput}`; e.target.style.boxShadow = 'none'; }}
+          />
+          <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: t.textMuted }} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8" /><path strokeLinecap="round" d="m21 21-4.35-4.35" />
+          </svg>
+        </div>
       </div>
 
-      {/* Questions table */}
+      {/* Questions list */}
       {isLoading ? (
-        <div className="text-center py-12 text-gray-400">Loading...</div>
+        <div className="flex items-center justify-center py-16 gap-2" style={{ color: t.textMuted }}>
+          <div className="w-4 h-4 rounded-full border-2 animate-spin" style={{ borderColor: t.loadingColor, borderTopColor: 'transparent' }} />
+          <span className="text-sm">Loading...</span>
+        </div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-12 text-gray-400 text-sm">
-          {questions.length === 0
-            ? 'No questions yet. Add one to get started!'
-            : 'No questions match your filter.'}
+        <div className="flex flex-col items-center justify-center py-16 gap-3">
+          <div className="text-4xl" style={{ opacity: 0.2 }}>◎</div>
+          <p className="text-sm" style={{ color: t.emptyText }}>
+            {questions.length === 0 ? 'No questions yet — add your first one!' : 'No questions match your filter.'}
+          </p>
         </div>
       ) : (
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          {/* Table header — hidden on small screens */}
-          <div className="hidden sm:grid sm:grid-cols-[2.5rem_1fr_7rem_5rem] gap-3 px-4 py-2.5 bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 uppercase tracking-wide">
-            <div></div>
+        <div
+          className="rounded-2xl overflow-hidden transition-all duration-300"
+          style={{ background: t.bgCard, border: `1px solid ${t.border}` }}
+        >
+          {/* Header — desktop only */}
+          <div
+            className="hidden sm:grid sm:grid-cols-[2.5rem_1fr_7rem_5rem] gap-3 px-5 py-3 text-[10px] font-bold uppercase tracking-widest"
+            style={{ borderBottom: `1px solid ${t.border}`, color: t.tableHeaderText, background: t.bgCardHeader }}
+          >
+            <div />
             <div>Title</div>
             <div>Difficulty</div>
             <div className="text-center">Actions</div>
           </div>
           {filtered.map((question, idx) => (
-            <QuestionRow
-              key={question.id}
-              question={question}
-              isLast={idx === filtered.length - 1}
-            />
+            <QuestionRow key={question.id} question={question} isLast={idx === filtered.length - 1} />
           ))}
         </div>
       )}
