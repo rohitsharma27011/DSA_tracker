@@ -40,24 +40,24 @@ export default function TopicView({ topicId, topics }) {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6">
       {/* Topic header */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-2xl font-bold text-gray-800">{topic.name}</h2>
+      <div className="mb-5">
+        <div className="flex items-start sm:items-center justify-between gap-3 mb-3">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-800 leading-tight">{topic.name}</h2>
           <button
             onClick={() => setShowAddQuestion(true)}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors"
+            className="flex-shrink-0 px-3 py-1.5 md:px-4 md:py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors"
           >
             + Add Question
           </button>
         </div>
-        <ProgressBar completed={completed} total={questions.length} className="max-w-sm" />
+        <ProgressBar completed={completed} total={questions.length} />
       </div>
 
       {/* Filters & Search */}
-      <div className="flex flex-wrap items-center gap-3 mb-5">
-        <div className="flex gap-1.5">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-5">
+        <div className="flex flex-wrap gap-1.5">
           {DIFFICULTIES.map((d) => (
             <button
               key={d}
@@ -83,7 +83,7 @@ export default function TopicView({ topicId, topics }) {
           placeholder="Search questions..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="ml-auto px-3 py-1.5 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-56"
+          className="w-full sm:w-auto sm:ml-auto px-3 py-1.5 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
       </div>
 
@@ -91,15 +91,15 @@ export default function TopicView({ topicId, topics }) {
       {isLoading ? (
         <div className="text-center py-12 text-gray-400">Loading...</div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-12 text-gray-400">
+        <div className="text-center py-12 text-gray-400 text-sm">
           {questions.length === 0
             ? 'No questions yet. Add one to get started!'
             : 'No questions match your filter.'}
         </div>
       ) : (
         <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          {/* Table header */}
-          <div className="grid grid-cols-[2.5rem_1fr_7rem_5rem] gap-3 px-4 py-2.5 bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+          {/* Table header — hidden on small screens */}
+          <div className="hidden sm:grid sm:grid-cols-[2.5rem_1fr_7rem_5rem] gap-3 px-4 py-2.5 bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 uppercase tracking-wide">
             <div></div>
             <div>Title</div>
             <div>Difficulty</div>

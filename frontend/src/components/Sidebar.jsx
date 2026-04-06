@@ -5,7 +5,7 @@ import AddTopicModal from './AddTopicModal.jsx';
 
 function ProgressFraction({ completed, total }) {
   return (
-    <span className="text-xs text-gray-400 ml-auto">
+    <span className="text-xs text-gray-400 ml-auto flex-shrink-0">
       {completed}/{total}
     </span>
   );
@@ -43,9 +43,10 @@ export default function Sidebar({ topics, selectedTopicId, onSelectTopic }) {
         <nav className="flex-1 overflow-y-auto py-2">
           {topics.map((topic) => {
             const isSelected = topic.id === selectedTopicId;
-            const pct = topic.totalCount > 0
-              ? Math.round((topic.completedCount / topic.totalCount) * 100)
-              : 0;
+            const pct =
+              topic.totalCount > 0
+                ? Math.round((topic.completedCount / topic.totalCount) * 100)
+                : 0;
 
             return (
               <div
@@ -58,7 +59,7 @@ export default function Sidebar({ topics, selectedTopicId, onSelectTopic }) {
                 }`}
               >
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center justify-between mb-1 gap-2">
                     <span className="text-sm font-medium truncate">{topic.name}</span>
                     <ProgressFraction
                       completed={topic.completedCount}
@@ -66,9 +67,15 @@ export default function Sidebar({ topics, selectedTopicId, onSelectTopic }) {
                     />
                   </div>
                   {/* Mini progress bar */}
-                  <div className={`h-0.5 rounded-full ${isSelected ? 'bg-blue-400' : 'bg-gray-700'}`}>
+                  <div
+                    className={`h-0.5 rounded-full ${
+                      isSelected ? 'bg-blue-400' : 'bg-gray-700'
+                    }`}
+                  >
                     <div
-                      className={`h-0.5 rounded-full transition-all ${isSelected ? 'bg-white' : 'bg-green-500'}`}
+                      className={`h-0.5 rounded-full transition-all ${
+                        isSelected ? 'bg-white' : 'bg-green-500'
+                      }`}
                       style={{ width: `${pct}%` }}
                     />
                   </div>
@@ -76,7 +83,7 @@ export default function Sidebar({ topics, selectedTopicId, onSelectTopic }) {
                 {/* Delete button */}
                 <button
                   onClick={(e) => handleDelete(e, topic.id)}
-                  className="ml-2 opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-400 transition-opacity text-xs"
+                  className="ml-2 opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-400 transition-opacity text-xs flex-shrink-0"
                   title="Delete topic"
                 >
                   ✕
@@ -97,9 +104,7 @@ export default function Sidebar({ topics, selectedTopicId, onSelectTopic }) {
         </div>
       </aside>
 
-      {showAddTopic && (
-        <AddTopicModal onClose={() => setShowAddTopic(false)} />
-      )}
+      {showAddTopic && <AddTopicModal onClose={() => setShowAddTopic(false)} />}
     </>
   );
 }

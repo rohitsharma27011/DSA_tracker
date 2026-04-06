@@ -28,7 +28,7 @@ export default function AddQuestionModal({ topicId, onClose }) {
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md"
+        className="bg-white rounded-xl shadow-xl p-5 md:p-6 w-full max-w-md mx-4"
         onClick={(e) => e.stopPropagation()}
       >
         <h3 className="text-lg font-semibold text-gray-800 mb-4">Add New Question</h3>

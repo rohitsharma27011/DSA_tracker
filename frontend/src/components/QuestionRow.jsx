@@ -25,10 +25,7 @@ export default function QuestionRow({ question, isLast }) {
       queryClient.setQueryData(['topics'], (old) =>
         old?.map((t) =>
           t.id === question.topicId
-            ? {
-                ...t,
-                completedCount: t.completedCount + (completed ? 1 : -1),
-              }
+            ? { ...t, completedCount: t.completedCount + (completed ? 1 : -1) }
             : t
         )
       );
@@ -54,14 +51,64 @@ export default function QuestionRow({ question, isLast }) {
     }
   };
 
+  const titleEl = question.url ? (
+    <a
+      href={question.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`text-sm font-medium hover:text-blue-600 hover:underline transition-colors ${
+        question.completed ? 'line-through text-gray-400' : 'text-gray-800'
+      }`}
+    >
+      {question.title}
+    </a>
+  ) : (
+    <span
+      className={`text-sm font-medium ${
+        question.completed ? 'line-through text-gray-400' : 'text-gray-800'
+      }`}
+    >
+      {question.title}
+    </span>
+  );
+
+  const diffBadge = (
+    <span
+      className={`inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full ${
+        DIFFICULTY_STYLES[question.difficulty] || ''
+      }`}
+    >
+      {question.difficulty}
+    </span>
+  );
+
+  const actions = (
+    <div className="flex items-center gap-2">
+      <button
+        onClick={() => setShowEdit(true)}
+        className="text-gray-400 hover:text-blue-500 transition-colors text-sm"
+        title="Edit"
+      >
+        ✏️
+      </button>
+      <button
+        onClick={handleDelete}
+        className="text-gray-400 hover:text-red-500 transition-colors text-sm"
+        title="Delete"
+      >
+        🗑️
+      </button>
+    </div>
+  );
+
   return (
     <>
+      {/* Desktop row (sm+): fixed grid */}
       <div
-        className={`grid grid-cols-[2.5rem_1fr_7rem_5rem] gap-3 px-4 py-3 items-center hover:bg-gray-50 transition-colors ${
+        className={`hidden sm:grid sm:grid-cols-[2.5rem_1fr_7rem_5rem] gap-3 px-4 py-3 items-center hover:bg-gray-50 transition-colors ${
           !isLast ? 'border-b border-gray-100' : ''
         } ${question.completed ? 'opacity-60' : ''}`}
       >
-        {/* Checkbox */}
         <div className="flex items-center justify-center">
           <input
             type="checkbox"
@@ -70,58 +117,29 @@ export default function QuestionRow({ question, isLast }) {
             className="w-4 h-4 rounded accent-blue-600 cursor-pointer"
           />
         </div>
+        <div>{titleEl}</div>
+        <div>{diffBadge}</div>
+        <div className="flex items-center justify-center">{actions}</div>
+      </div>
 
-        {/* Title */}
-        <div>
-          {question.url ? (
-            <a
-              href={question.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`text-sm font-medium hover:text-blue-600 hover:underline transition-colors ${
-                question.completed ? 'line-through text-gray-400' : 'text-gray-800'
-              }`}
-            >
-              {question.title}
-            </a>
-          ) : (
-            <span
-              className={`text-sm font-medium ${
-                question.completed ? 'line-through text-gray-400' : 'text-gray-800'
-              }`}
-            >
-              {question.title}
-            </span>
-          )}
-        </div>
-
-        {/* Difficulty badge */}
-        <div>
-          <span
-            className={`inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full ${
-              DIFFICULTY_STYLES[question.difficulty] || ''
-            }`}
-          >
-            {question.difficulty}
-          </span>
-        </div>
-
-        {/* Actions */}
-        <div className="flex items-center justify-center gap-2">
-          <button
-            onClick={() => setShowEdit(true)}
-            className="text-gray-400 hover:text-blue-500 transition-colors text-sm"
-            title="Edit"
-          >
-            ✏️
-          </button>
-          <button
-            onClick={handleDelete}
-            className="text-gray-400 hover:text-red-500 transition-colors text-sm"
-            title="Delete"
-          >
-            🗑️
-          </button>
+      {/* Mobile row: stacked card layout */}
+      <div
+        className={`sm:hidden flex items-start gap-3 px-4 py-3 hover:bg-gray-50 transition-colors ${
+          !isLast ? 'border-b border-gray-100' : ''
+        } ${question.completed ? 'opacity-60' : ''}`}
+      >
+        <input
+          type="checkbox"
+          checked={question.completed}
+          onChange={(e) => toggleComplete.mutate(e.target.checked)}
+          className="mt-0.5 w-4 h-4 rounded accent-blue-600 cursor-pointer flex-shrink-0"
+        />
+        <div className="flex-1 min-w-0">
+          <div className="mb-1">{titleEl}</div>
+          <div className="flex items-center gap-2">
+            {diffBadge}
+            {actions}
+          </div>
         </div>
       </div>
 
