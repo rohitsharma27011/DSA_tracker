@@ -1,0 +1,351 @@
+{
+  "topics": [
+    {
+      "id": "ca14e8af-1624-41d1-9abf-06a0acbf0a42",
+      "name": "Arrays",
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "dcd7d03c-f547-4bc0-8f6c-60e93e3cdb31",
+      "name": "Strings",
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "85438a2d-afa0-49d4-b759-8baae9f10e48",
+      "name": "Trees",
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "0f8ed637-13dc-43e8-b2ce-e1ce7c584eb5",
+      "name": "Dynamic Programming",
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "3f6eb000-3e8e-432e-b1a5-9f6067118b3b",
+      "name": "Graphs",
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "0f0b8e33-21fb-4fa6-aa1f-4fa9e61e7c3c",
+      "name": "Linked List",
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    }
+  ],
+  "questions": [
+    {
+      "id": "b91ad7b4-bb90-4c12-a826-9834fabdb636",
+      "topicId": "ca14e8af-1624-41d1-9abf-06a0acbf0a42",
+      "title": "Two Sum",
+      "url": "https://leetcode.com/problems/two-sum/",
+      "difficulty": "Easy",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "d68f9c40-c060-45bc-80af-e693c81e6481",
+      "topicId": "ca14e8af-1624-41d1-9abf-06a0acbf0a42",
+      "title": "Best Time to Buy and Sell Stock",
+      "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/",
+      "difficulty": "Easy",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "284d9b44-5f46-4d0a-aea1-34fd0766de47",
+      "topicId": "ca14e8af-1624-41d1-9abf-06a0acbf0a42",
+      "title": "Contains Duplicate",
+      "url": "https://leetcode.com/problems/contains-duplicate/",
+      "difficulty": "Easy",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "2fc29fef-78ca-4a47-9079-ecadb859726e",
+      "topicId": "ca14e8af-1624-41d1-9abf-06a0acbf0a42",
+      "title": "Product of Array Except Self",
+      "url": "https://leetcode.com/problems/product-of-array-except-self/",
+      "difficulty": "Medium",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "3867cac8-59fe-47f3-b419-53d1038cd828",
+      "topicId": "ca14e8af-1624-41d1-9abf-06a0acbf0a42",
+      "title": "Maximum Subarray",
+      "url": "https://leetcode.com/problems/maximum-subarray/",
+      "difficulty": "Medium",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "1f2c7e91-4fca-4df4-aad1-9d6cad497310",
+      "topicId": "ca14e8af-1624-41d1-9abf-06a0acbf0a42",
+      "title": "3Sum",
+      "url": "https://leetcode.com/problems/3sum/",
+      "difficulty": "Medium",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "19cf68d7-c697-408c-899c-af1b03b2d780",
+      "topicId": "ca14e8af-1624-41d1-9abf-06a0acbf0a42",
+      "title": "Container With Most Water",
+      "url": "https://leetcode.com/problems/container-with-most-water/",
+      "difficulty": "Medium",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "e255bd43-266d-494c-9509-6d6f634106a9",
+      "topicId": "dcd7d03c-f547-4bc0-8f6c-60e93e3cdb31",
+      "title": "Valid Anagram",
+      "url": "https://leetcode.com/problems/valid-anagram/",
+      "difficulty": "Easy",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "3285b55d-0701-4f46-826d-eecde5e90539",
+      "topicId": "dcd7d03c-f547-4bc0-8f6c-60e93e3cdb31",
+      "title": "Valid Palindrome",
+      "url": "https://leetcode.com/problems/valid-palindrome/",
+      "difficulty": "Easy",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "9546fc3b-4c00-44b4-b49d-5265b1191669",
+      "topicId": "dcd7d03c-f547-4bc0-8f6c-60e93e3cdb31",
+      "title": "Longest Substring Without Repeating Characters",
+      "url": "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
+      "difficulty": "Medium",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "08255fd9-d08d-46a0-8510-2540355c3906",
+      "topicId": "dcd7d03c-f547-4bc0-8f6c-60e93e3cdb31",
+      "title": "Group Anagrams",
+      "url": "https://leetcode.com/problems/group-anagrams/",
+      "difficulty": "Medium",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "e907201e-dba5-4c4f-838f-f1fc99557c61",
+      "topicId": "dcd7d03c-f547-4bc0-8f6c-60e93e3cdb31",
+      "title": "Longest Palindromic Substring",
+      "url": "https://leetcode.com/problems/longest-palindromic-substring/",
+      "difficulty": "Medium",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "c3ab10ae-80c1-42ac-93df-4439ca236850",
+      "topicId": "dcd7d03c-f547-4bc0-8f6c-60e93e3cdb31",
+      "title": "Minimum Window Substring",
+      "url": "https://leetcode.com/problems/minimum-window-substring/",
+      "difficulty": "Hard",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "e5379e16-4c5a-4951-9420-5c91282ee49f",
+      "topicId": "85438a2d-afa0-49d4-b759-8baae9f10e48",
+      "title": "Invert Binary Tree",
+      "url": "https://leetcode.com/problems/invert-binary-tree/",
+      "difficulty": "Easy",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "4a447cea-5272-4c7b-ae0a-40cedf411514",
+      "topicId": "85438a2d-afa0-49d4-b759-8baae9f10e48",
+      "title": "Maximum Depth of Binary Tree",
+      "url": "https://leetcode.com/problems/maximum-depth-of-binary-tree/",
+      "difficulty": "Easy",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "3ee6eeb9-a771-416e-a871-c8fad7bfdd9f",
+      "topicId": "85438a2d-afa0-49d4-b759-8baae9f10e48",
+      "title": "Same Tree",
+      "url": "https://leetcode.com/problems/same-tree/",
+      "difficulty": "Easy",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "f3888094-8c72-40a1-ab64-b5e1fdd1bf98",
+      "topicId": "85438a2d-afa0-49d4-b759-8baae9f10e48",
+      "title": "Binary Tree Level Order Traversal",
+      "url": "https://leetcode.com/problems/binary-tree-level-order-traversal/",
+      "difficulty": "Medium",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "8794ca04-8dbf-4876-aad6-d672860cf2f2",
+      "topicId": "85438a2d-afa0-49d4-b759-8baae9f10e48",
+      "title": "Validate Binary Search Tree",
+      "url": "https://leetcode.com/problems/validate-binary-search-tree/",
+      "difficulty": "Medium",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "32f5a0f5-628c-45dd-9c16-767dd9bd9f8c",
+      "topicId": "85438a2d-afa0-49d4-b759-8baae9f10e48",
+      "title": "Binary Tree Maximum Path Sum",
+      "url": "https://leetcode.com/problems/binary-tree-maximum-path-sum/",
+      "difficulty": "Hard",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "0c0325f5-8711-4960-b508-42982182bcfe",
+      "topicId": "0f8ed637-13dc-43e8-b2ce-e1ce7c584eb5",
+      "title": "Climbing Stairs",
+      "url": "https://leetcode.com/problems/climbing-stairs/",
+      "difficulty": "Easy",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "d08083a1-d539-4fa9-882b-c5d9ff88a4cd",
+      "topicId": "0f8ed637-13dc-43e8-b2ce-e1ce7c584eb5",
+      "title": "House Robber",
+      "url": "https://leetcode.com/problems/house-robber/",
+      "difficulty": "Medium",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "3e358d86-b549-4e0b-8071-fbbe00f19d65",
+      "topicId": "0f8ed637-13dc-43e8-b2ce-e1ce7c584eb5",
+      "title": "Coin Change",
+      "url": "https://leetcode.com/problems/coin-change/",
+      "difficulty": "Medium",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "00e13668-9673-4e9a-a548-568ea14910b1",
+      "topicId": "0f8ed637-13dc-43e8-b2ce-e1ce7c584eb5",
+      "title": "Longest Increasing Subsequence",
+      "url": "https://leetcode.com/problems/longest-increasing-subsequence/",
+      "difficulty": "Medium",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "60ff5485-e89b-4073-abad-a5b199ba517a",
+      "topicId": "0f8ed637-13dc-43e8-b2ce-e1ce7c584eb5",
+      "title": "Word Break",
+      "url": "https://leetcode.com/problems/word-break/",
+      "difficulty": "Medium",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "599a69df-7916-4551-9978-3b863c139403",
+      "topicId": "0f8ed637-13dc-43e8-b2ce-e1ce7c584eb5",
+      "title": "Unique Paths",
+      "url": "https://leetcode.com/problems/unique-paths/",
+      "difficulty": "Medium",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "cb056406-b811-47c0-97b1-03ac16fbae66",
+      "topicId": "3f6eb000-3e8e-432e-b1a5-9f6067118b3b",
+      "title": "Number of Islands",
+      "url": "https://leetcode.com/problems/number-of-islands/",
+      "difficulty": "Medium",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "56e188b9-e5e8-4d0c-9411-e55036984017",
+      "topicId": "3f6eb000-3e8e-432e-b1a5-9f6067118b3b",
+      "title": "Clone Graph",
+      "url": "https://leetcode.com/problems/clone-graph/",
+      "difficulty": "Medium",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "3786339c-c6de-48d5-84e0-1ac682db7349",
+      "topicId": "3f6eb000-3e8e-432e-b1a5-9f6067118b3b",
+      "title": "Course Schedule",
+      "url": "https://leetcode.com/problems/course-schedule/",
+      "difficulty": "Medium",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "1e528b04-20ee-422a-a1a3-eff7d0b99133",
+      "topicId": "3f6eb000-3e8e-432e-b1a5-9f6067118b3b",
+      "title": "Pacific Atlantic Water Flow",
+      "url": "https://leetcode.com/problems/pacific-atlantic-water-flow/",
+      "difficulty": "Medium",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "fc39872a-d534-47dc-a05e-74983e8a43a0",
+      "topicId": "3f6eb000-3e8e-432e-b1a5-9f6067118b3b",
+      "title": "Word Ladder",
+      "url": "https://leetcode.com/problems/word-ladder/",
+      "difficulty": "Hard",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "3be2bbd7-5094-488f-a0a6-92875b87255e",
+      "topicId": "0f0b8e33-21fb-4fa6-aa1f-4fa9e61e7c3c",
+      "title": "Reverse Linked List",
+      "url": "https://leetcode.com/problems/reverse-linked-list/",
+      "difficulty": "Easy",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "700181ec-aff5-4478-95bf-f41e40f2afe8",
+      "topicId": "0f0b8e33-21fb-4fa6-aa1f-4fa9e61e7c3c",
+      "title": "Merge Two Sorted Lists",
+      "url": "https://leetcode.com/problems/merge-two-sorted-lists/",
+      "difficulty": "Easy",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "0661b72c-0b6a-49f2-818b-96b6699757fb",
+      "topicId": "0f0b8e33-21fb-4fa6-aa1f-4fa9e61e7c3c",
+      "title": "Linked List Cycle",
+      "url": "https://leetcode.com/problems/linked-list-cycle/",
+      "difficulty": "Easy",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "e5735b4a-04c5-4ef8-88e1-fcc71812943c",
+      "topicId": "0f0b8e33-21fb-4fa6-aa1f-4fa9e61e7c3c",
+      "title": "Remove Nth Node From End of List",
+      "url": "https://leetcode.com/problems/remove-nth-node-from-end-of-list/",
+      "difficulty": "Medium",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    },
+    {
+      "id": "9bd17d3e-4d92-46dd-b7d5-52d59b7bae24",
+      "topicId": "0f0b8e33-21fb-4fa6-aa1f-4fa9e61e7c3c",
+      "title": "Merge K Sorted Lists",
+      "url": "https://leetcode.com/problems/merge-k-sorted-lists/",
+      "difficulty": "Hard",
+      "completed": false,
+      "createdAt": "2026-04-06T18:23:02.626Z"
+    }
+  ]
+}
