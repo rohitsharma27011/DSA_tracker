@@ -6,6 +6,10 @@ import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
 import topicsRouter from './routes/topics.js';
 import questionsRouter from './routes/questions.js';
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -94,6 +98,11 @@ app.use(express.json());
 
 app.use('/api/topics', topicsRouter);
 app.use('/api', questionsRouter);
+
+console.log("MONGO_URI:", process.env.MONGO_URI);
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB connected ✅"))
+  .catch((err) => console.log("MongoDB error:", err));
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

@@ -1,62 +1,88 @@
-import { Router } from 'express';
-import { v4 as uuidv4 } from 'uuid';
-import { db } from '../server.js';
+import { Router } from "express";
+import Topic from "../models/Topic.js";
 
 const router = Router();
 
 // GET /api/topics — all topics with progress counts
-router.get('/', (req, res) => {
-  db.read();
-  const topics = db.data.topics.map((topic) => {
-    const questions = db.data.questions.filter((q) => q.topicId === topic.id);
+router.get("/", async (req, res) => {
+  const topics = await Topic.find();
+
+  const formatted = topics.map((topic) => {
+    const totalCount = topic.questions.length;
+    const completedCount = topic.questions.filter((q) => q.done).length;
+
     return {
-      ...topic,
-      totalCount: questions.length,
-      completedCount: questions.filter((q) => q.completed).length,
+      _id: topic._id,
+      name: topic.name,
+      totalCount,
+      completedCount,
     };
   });
-  res.json(topics);
+
+  res.json(formatted);
 });
 
 // POST /api/topics — create topic
-router.post('/', (req, res) => {
+router.post("/", async (req, res) => {
   const { name } = req.body;
-  if (!name || !name.trim()) {
-    return res.status(400).json({ error: 'Topic name is required' });
-  }
-  const topic = { id: uuidv4(), name: name.trim(), createdAt: new Date().toISOString() };
-  db.data.topics.push(topic);
-  db.write();
-  res.status(201).json({ ...topic, totalCount: 0, completedCount: 0 });
-});
 
-// PUT /api/topics/:id — rename topic
-router.put('/:id', (req, res) => {
-  db.read();
-  const topic = db.data.topics.find((t) => t.id === req.params.id);
-  if (!topic) return res.status(404).json({ error: 'Topic not found' });
-  const { name } = req.body;
   if (!name || !name.trim()) {
-    return res.status(400).json({ error: 'Topic name is required' });
+    return res.status(400).json({ error: "Topic name is required" });
   }
-  topic.name = name.trim();
-  db.write();
-  const questions = db.data.questions.filter((q) => q.topicId === topic.id);
-  res.json({
-    ...topic,
-    totalCount: questions.length,
-    completedCount: questions.filter((q) => q.completed).length,
+
+  const newTopic = new Topic({
+    name: name.trim(),
+    questions: [],
+  });
+
+  await newTopic.save();
+
+  res.status(201).json({
+    _id: newTopic._id,
+    name: newTopic.name,
+    totalCount: 0,
+    completedCount: 0,
   });
 });
 
-// DELETE /api/topics/:id — delete topic and all its questions
-router.delete('/:id', (req, res) => {
-  db.read();
-  const idx = db.data.topics.findIndex((t) => t.id === req.params.id);
-  if (idx === -1) return res.status(404).json({ error: 'Topic not found' });
-  db.data.topics.splice(idx, 1);
-  db.data.questions = db.data.questions.filter((q) => q.topicId !== req.params.id);
-  db.write();
+// PUT /api/topics/:id — rename topic
+router.put("/:id", async (req, res) => {
+  const { name } = req.body;
+
+  if (!name || !name.trim()) {
+    return res.status(400).json({ error: "Topic name is required" });
+  }
+
+  const topic = await Topic.findById(req.params.id);
+
+  if (!topic) {
+    return res.status(404).json({ error: "Topic not found" });
+  }
+
+  topic.name = name.trim();
+  await topic.save();
+
+  const totalCount = topic.questions.length;
+  const completedCount = topic.questions.filter((q) => q.done).length;
+
+  res.json({
+    _id: topic._id,
+    name: topic.name,
+    totalCount,
+    completedCount,
+  });
+});
+
+// DELETE /api/topics/:id — delete topic
+router.delete("/:id", async (req, res) => {
+  const topic = await Topic.findById(req.params.id);
+
+  if (!topic) {
+    return res.status(404).json({ error: "Topic not found" });
+  }
+
+  await Topic.findByIdAndDelete(req.params.id);
+
   res.json({ success: true });
 });
 
