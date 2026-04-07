@@ -32,6 +32,10 @@ export default function QuestionRow({ question, topicId, isLast }) {
       );
       return { prev };
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['questions', topicId] });
+      queryClient.invalidateQueries({ queryKey: ['topics'] });
+    },
     onError: (_, __, ctx) => {
       queryClient.setQueryData(['questions', topicId], ctx.prev);
       queryClient.invalidateQueries({ queryKey: ['topics'] });
