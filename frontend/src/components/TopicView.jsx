@@ -21,7 +21,7 @@ export default function TopicView({ topicId, topics }) {
   const [showAddQuestion, setShowAddQuestion] = useState(false);
   const { t } = useTheme();
 
-  const topic = topics.find((tp) => tp.id === topicId);
+  const topic = topics.find((tp) => tp._id === topicId);
 
   const { data: questions = [], isLoading } = useQuery({
     queryKey: ['questions', topicId],
@@ -145,7 +145,7 @@ export default function TopicView({ topicId, topics }) {
             <div className="text-center">Actions</div>
           </div>
           {filtered.map((question, idx) => (
-            <QuestionRow key={question.id} question={question} isLast={idx === filtered.length - 1} />
+            <QuestionRow key={question._id} question={question} topicId={topicId} isLast={idx === filtered.length - 1} />
           ))}
         </div>
       )}

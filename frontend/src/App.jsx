@@ -51,9 +51,9 @@ function App() {
   });
 
   const effectiveTopicId =
-    selectedTopicId && topics.some((t) => t.id === selectedTopicId)
+    selectedTopicId && topics.some((t) => t._id === selectedTopicId)
       ? selectedTopicId
-      : topics[0]?.id ?? null;
+      : topics[0]?._id ?? null;
 
   const handleSelectTopic = (id) => {
     setSelectedTopicId(id);

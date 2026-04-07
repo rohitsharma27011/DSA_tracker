@@ -6,14 +6,14 @@ import { useTheme } from '../contexts/ThemeContext.jsx';
 const DIFF_DOT = { Easy: '#4ade80', Medium: '#facc15', Hard: '#f87171' };
 const DIFF_RGB  = { Easy: '34,197,94', Medium: '234,179,8', Hard: '239,68,68' };
 
-export default function EditQuestionModal({ question, onClose }) {
+export default function EditQuestionModal({ question, topicId, onClose }) {
   const [form, setForm] = useState({ title: question.title, url: question.url || '', difficulty: question.difficulty });
   const { t } = useTheme();
   const queryClient = useQueryClient();
 
   const updateQuestion = useMutation({
-    mutationFn: (data) => client.put(`/questions/${question.id}`, data),
-    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['questions', question.topicId] }); onClose(); },
+    mutationFn: (data) => client.put(`/questions/${question._id}`, data),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['questions', topicId] }); onClose(); },
   });
 
   const handleSubmit = (e) => { e.preventDefault(); if (form.title.trim()) updateQuestion.mutate(form); };

@@ -10,22 +10,22 @@ const DIFF_BADGE = {
   Hard:   { background: 'rgba(239,68,68,0.12)',  color: '#f87171', border: '1px solid rgba(239,68,68,0.25)',  glow: '0 0 8px rgba(239,68,68,0.2)' },
 };
 
-export default function QuestionRow({ question, isLast }) {
+export default function QuestionRow({ question, topicId, isLast }) {
   const [showEdit, setShowEdit] = useState(false);
   const { t } = useTheme();
   const queryClient = useQueryClient();
 
   const toggleComplete = useMutation({
-    mutationFn: (completed) => client.put(`/questions/${question.id}`, { completed }),
+    mutationFn: (completed) => client.put(`/questions/${question._id}`, { completed }),
     onMutate: async (completed) => {
-      await queryClient.cancelQueries({ queryKey: ['questions', question.topicId] });
-      const prev = queryClient.getQueryData(['questions', question.topicId]);
-      queryClient.setQueryData(['questions', question.topicId], (old) =>
-        old.map((q) => (q.id === question.id ? { ...q, completed } : q))
+      await queryClient.cancelQueries({ queryKey: ['questions', topicId] });
+      const prev = queryClient.getQueryData(['questions', topicId]);
+      queryClient.setQueryData(['questions', topicId], (old) =>
+        old.map((q) => (q._id === question._id ? { ...q, completed } : q))
       );
       queryClient.setQueryData(['topics'], (old) =>
         old?.map((tp) =>
-          tp.id === question.topicId
+          tp._id === topicId
             ? { ...tp, completedCount: tp.completedCount + (completed ? 1 : -1) }
             : tp
         )
@@ -33,15 +33,15 @@ export default function QuestionRow({ question, isLast }) {
       return { prev };
     },
     onError: (_, __, ctx) => {
-      queryClient.setQueryData(['questions', question.topicId], ctx.prev);
+      queryClient.setQueryData(['questions', topicId], ctx.prev);
       queryClient.invalidateQueries({ queryKey: ['topics'] });
     },
   });
 
   const deleteQuestion = useMutation({
-    mutationFn: () => client.delete(`/questions/${question.id}`),
+    mutationFn: () => client.delete(`/questions/${question._id}`),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['questions', question.topicId] });
+      queryClient.invalidateQueries({ queryKey: ['questions', topicId] });
       queryClient.invalidateQueries({ queryKey: ['topics'] });
     },
   });
@@ -142,7 +142,7 @@ export default function QuestionRow({ question, isLast }) {
         </div>
       </div>
 
-      {showEdit && <EditQuestionModal question={question} onClose={() => setShowEdit(false)} />}
+      {showEdit && <EditQuestionModal question={question} topicId={topicId} onClose={() => setShowEdit(false)} />}
     </>
   );
 }

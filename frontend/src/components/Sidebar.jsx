@@ -65,15 +65,15 @@ export default function Sidebar({ topics, selectedTopicId, onSelectTopic }) {
             Topics
           </p>
           {topics.map((topic) => {
-            const isSelected = topic.id === selectedTopicId;
+            const isSelected = topic._id === selectedTopicId;
             const pct = topic.totalCount > 0
               ? Math.round((topic.completedCount / topic.totalCount) * 100)
               : 0;
 
             return (
               <div
-                key={topic.id}
-                onClick={() => onSelectTopic(topic.id)}
+                key={topic._id}
+                onClick={() => onSelectTopic(topic._id)}
                 className="group relative flex items-center gap-2.5 px-3 py-2.5 rounded-xl mb-1 cursor-pointer transition-all duration-200"
                 style={{
                   touchAction: 'manipulation',
@@ -124,7 +124,7 @@ export default function Sidebar({ topics, selectedTopicId, onSelectTopic }) {
                 </div>
                 {/* Delete */}
                 <button
-                  onClick={(e) => handleDelete(e, topic.id)}
+                  onClick={(e) => handleDelete(e, topic._id)}
                   className="opacity-0 group-hover:opacity-100 transition-opacity w-5 h-5 rounded flex items-center justify-center flex-shrink-0 text-xs"
                   style={{ color: 'rgba(255,255,255,0.4)', background: 'rgba(239,68,68,0.15)' }}
                   onMouseEnter={(e) => { e.currentTarget.style.color = '#f87171'; }}

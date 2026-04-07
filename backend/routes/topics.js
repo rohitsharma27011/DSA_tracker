@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
 
   const formatted = topics.map((topic) => {
     const totalCount = topic.questions.length;
-    const completedCount = topic.questions.filter((q) => q.done).length;
+    const completedCount = topic.questions.filter((q) => q.completed).length;
 
     return {
       _id: topic._id,
@@ -20,6 +20,17 @@ router.get("/", async (req, res) => {
   });
 
   res.json(formatted);
+});
+
+// GET /api/topics/:id — get topic with questions
+router.get("/:id", async (req, res) => {
+  const topic = await Topic.findById(req.params.id);
+
+  if (!topic) {
+    return res.status(404).json({ error: "Topic not found" });
+  }
+
+  res.json(topic);
 });
 
 // POST /api/topics — create topic
@@ -63,7 +74,7 @@ router.put("/:id", async (req, res) => {
   await topic.save();
 
   const totalCount = topic.questions.length;
-  const completedCount = topic.questions.filter((q) => q.done).length;
+  const completedCount = topic.questions.filter((q) => q.completed).length;
 
   res.json({
     _id: topic._id,
