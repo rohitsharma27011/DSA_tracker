@@ -54,7 +54,7 @@ function BTSBackground() {
           filter: 'drop-shadow(0 0 40px rgba(236,72,153,0.5)) drop-shadow(0 0 80px rgba(147,51,234,0.35))',
         }}
       >
-        <img src="/bts_wallpaper_bts (1).png" alt="BTS" style={{ width: '1000px', maxWidth: '95vw' }} />
+        <img src="/bts_wallpaper_bts (1).png" alt="BTS" style={{ width: '1000px', maxWidth: '90vw' }} />
       </div>
     </div>
   );
@@ -98,13 +98,12 @@ function App() {
         className={`fixed inset-y-0 left-0 z-30 transform transition-transform duration-300 md:relative md:translate-x-0 md:z-auto ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
-        style={{ position: 'relative', zIndex: 10 }}
       >
         <Sidebar topics={topics} selectedTopicId={effectiveTopicId} onSelectTopic={handleSelectTopic} />
       </div>
 
       {/* Main */}
-      <main className="flex-1 flex flex-col overflow-hidden min-w-0" style={{ position: 'relative', zIndex: 10 }}>
+      <main className="flex-1 flex flex-col overflow-hidden min-w-0 relative" style={{ zIndex: 1 }}>
         {/* Top bar */}
         <div
           className="px-4 py-3 md:px-6 md:py-4 flex items-center gap-3 flex-shrink-0"

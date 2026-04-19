@@ -12,7 +12,7 @@ const DIFF_BADGE = {
   Hard:   { background: 'rgba(239,68,68,0.12)',  color: '#f87171', border: '1px solid rgba(239,68,68,0.25)',  glow: '0 0 8px rgba(239,68,68,0.2)' },
 };
 
-export default function QuestionRow({ question, topicId, isLast }) {
+export default function QuestionRow({ question, topicId, isLast, number }) {
   const [showEdit, setShowEdit] = useState(false);
   const { t } = useTheme();
   const queryClient = useQueryClient();
@@ -153,8 +153,13 @@ export default function QuestionRow({ question, topicId, isLast }) {
         onMouseLeave={(e) => { if (!isDragging) e.currentTarget.style.background = isDragging ? t.bgHover : 'transparent'; }}
       >
         {/* Desktop */}
-        <div className="hidden sm:grid sm:grid-cols-[1.5rem_2.5rem_1fr_7rem_5rem] gap-3 px-5 py-3.5 items-center">
+        <div className="hidden sm:grid sm:grid-cols-[1.5rem_2.5rem_2.5rem_1fr_7rem_5rem] gap-3 px-5 py-3.5 items-center">
           {dragHandle}
+          <div className="flex justify-center">
+            <span className="text-xs font-bold tabular-nums" style={{ color: t.textMuted }}>
+              {number}
+            </span>
+          </div>
           <div className="flex justify-center">
             <input
               type="checkbox"
@@ -171,6 +176,9 @@ export default function QuestionRow({ question, topicId, isLast }) {
         {/* Mobile */}
         <div className="sm:hidden flex items-start gap-2 px-4 py-3.5">
           <div className="mt-1">{dragHandle}</div>
+          <span className="text-xs font-bold tabular-nums mt-1 flex-shrink-0" style={{ color: t.textMuted, minWidth: '16px' }}>
+            {number}
+          </span>
           <input
             type="checkbox"
             checked={question.completed}

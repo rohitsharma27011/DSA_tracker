@@ -183,10 +183,11 @@ export default function TopicView({ topicId, topics }) {
             >
               {/* Header — desktop only */}
               <div
-                className="hidden sm:grid sm:grid-cols-[1.5rem_2.5rem_1fr_7rem_5rem] gap-3 px-5 py-3 text-[10px] font-bold uppercase tracking-widest"
+                className="hidden sm:grid sm:grid-cols-[1.5rem_2.5rem_2.5rem_1fr_7rem_5rem] gap-3 px-5 py-3 text-[10px] font-bold uppercase tracking-widest"
                 style={{ borderBottom: `1px solid ${t.border}`, color: t.tableHeaderText, background: t.bgCardHeader }}
               >
                 <div />
+                <div>#</div>
                 <div />
                 <div>Title</div>
                 <div>Difficulty</div>
@@ -198,6 +199,7 @@ export default function TopicView({ topicId, topics }) {
                   question={question}
                   topicId={topicId}
                   isLast={idx === filtered.length - 1}
+                  number={questions.findIndex((q) => q._id === question._id) + 1}
                 />
               ))}
             </div>
