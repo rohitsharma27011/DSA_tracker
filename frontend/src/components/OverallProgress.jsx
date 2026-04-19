@@ -12,7 +12,7 @@ export default function OverallProgress({ topics }) {
       <div className="flex-shrink-0 flex items-center gap-3">
         <div>
           <h2 className="text-sm md:text-base font-bold leading-tight" style={{ color: t.textHeading }}>
-            Overall Progress
+            💜 Overall Progress
           </h2>
           <p className="text-xs mt-0.5" style={{ color: t.textMuted }}>
             {topics.length} topics · {total} problems
@@ -21,14 +21,14 @@ export default function OverallProgress({ topics }) {
         <div
           className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold"
           style={{
-            background: 'rgba(124,58,237,0.12)',
-            border: '1px solid rgba(124,58,237,0.25)',
-            color: '#a78bfa',
+            background: 'rgba(236,72,153,0.12)',
+            border: '1px solid rgba(236,72,153,0.25)',
+            color: '#f472b6',
           }}
         >
           <span
             className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-            style={{ background: '#a78bfa', animation: 'pulseDot 2s ease-in-out infinite' }}
+            style={{ background: '#ec4899', animation: 'pulseDot 2s ease-in-out infinite' }}
           />
           {pct}% done
         </div>

@@ -7,36 +7,56 @@ import client from './api/client.js';
 import { useTheme } from './contexts/ThemeContext.jsx';
 
 function ThemeToggle() {
-  const { isDark, toggle, t } = useTheme();
+  const { isDark, toggle } = useTheme();
   return (
     <button
       onClick={toggle}
       className="flex-shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-full transition-all duration-300"
       style={{
-        background: isDark ? 'rgba(124,58,237,0.15)' : 'rgba(124,58,237,0.1)',
-        border: `1px solid ${isDark ? 'rgba(124,58,237,0.3)' : 'rgba(124,58,237,0.25)'}`,
+        background: isDark ? 'rgba(147,51,234,0.15)' : 'rgba(236,72,153,0.1)',
+        border: `1px solid ${isDark ? 'rgba(147,51,234,0.35)' : 'rgba(236,72,153,0.3)'}`,
       }}
       title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
     >
-      {/* Track */}
       <div
         className="relative w-9 h-5 rounded-full transition-all duration-300 flex-shrink-0"
-        style={{ background: isDark ? 'rgba(124,58,237,0.4)' : 'rgba(124,58,237,0.25)' }}
+        style={{ background: isDark ? 'rgba(147,51,234,0.4)' : 'rgba(236,72,153,0.25)' }}
       >
         <div
           className="absolute top-0.5 w-4 h-4 rounded-full transition-all duration-300"
           style={{
             left: isDark ? '18px' : '2px',
-            background: 'linear-gradient(135deg, #7c3aed, #a855f7)',
-            boxShadow: '0 1px 4px rgba(124,58,237,0.5)',
+            background: isDark
+              ? 'linear-gradient(135deg, #9333ea, #ec4899)'
+              : 'linear-gradient(135deg, #ec4899, #fbbf24)',
+            boxShadow: isDark ? '0 1px 4px rgba(147,51,234,0.6)' : '0 1px 4px rgba(236,72,153,0.5)',
           }}
         />
       </div>
-      {/* Icon */}
-      <span className="text-sm leading-none" style={{ color: isDark ? '#a78bfa' : '#7c3aed' }}>
-        {isDark ? '🌙' : '☀️'}
+      <span className="text-sm leading-none">
+        {isDark ? '💜' : '☀️'}
       </span>
     </button>
+  );
+}
+
+function BTSBackground() {
+  return (
+    <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
+      <div
+        className="bts-float-4"
+        style={{
+          position: 'absolute',
+          bottom: '-40px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          opacity: 0.28,
+          filter: 'drop-shadow(0 0 40px rgba(236,72,153,0.5)) drop-shadow(0 0 80px rgba(147,51,234,0.35))',
+        }}
+      >
+        <img src="/bts_wallpaper_bts (1).png" alt="BTS" style={{ width: '1000px', maxWidth: '95vw' }} />
+      </div>
+    </div>
   );
 }
 
@@ -61,7 +81,9 @@ function App() {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ background: t.bg, transition: 'background 0.3s ease' }}>
+    <div className="flex h-screen overflow-hidden" style={{ background: t.bg, transition: 'background 0.3s ease', position: 'relative' }}>
+      <BTSBackground />
+
       {/* Mobile backdrop */}
       {sidebarOpen && (
         <div
@@ -76,12 +98,13 @@ function App() {
         className={`fixed inset-y-0 left-0 z-30 transform transition-transform duration-300 md:relative md:translate-x-0 md:z-auto ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
+        style={{ position: 'relative', zIndex: 10 }}
       >
         <Sidebar topics={topics} selectedTopicId={effectiveTopicId} onSelectTopic={handleSelectTopic} />
       </div>
 
       {/* Main */}
-      <main className="flex-1 flex flex-col overflow-hidden min-w-0">
+      <main className="flex-1 flex flex-col overflow-hidden min-w-0" style={{ position: 'relative', zIndex: 10 }}>
         {/* Top bar */}
         <div
           className="px-4 py-3 md:px-6 md:py-4 flex items-center gap-3 flex-shrink-0"
