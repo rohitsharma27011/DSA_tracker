@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import client from '../api/client.js';
 import EditQuestionModal from './EditQuestionModal.jsx';
 import { useTheme } from '../contexts/ThemeContext.jsx';
@@ -15,11 +17,17 @@ export default function QuestionRow({ question, topicId, isLast }) {
   const { t } = useTheme();
   const queryClient = useQueryClient();
 
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: question._id,
+  });
+
   const toggleComplete = useMutation({
     mutationFn: (completed) => client.put(`/questions/${question._id}`, { completed }),
     onMutate: async (completed) => {
       await queryClient.cancelQueries({ queryKey: ['questions', topicId] });
-      const prev = queryClient.getQueryData(['questions', topicId]);
+      await queryClient.cancelQueries({ queryKey: ['topics'] });
+      const prevQuestions = queryClient.getQueryData(['questions', topicId]);
+      const prevTopics = queryClient.getQueryData(['topics']);
       queryClient.setQueryData(['questions', topicId], (old) =>
         old.map((q) => (q._id === question._id ? { ...q, completed } : q))
       );
@@ -30,15 +38,11 @@ export default function QuestionRow({ question, topicId, isLast }) {
             : tp
         )
       );
-      return { prev };
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['questions', topicId] });
-      queryClient.invalidateQueries({ queryKey: ['topics'] });
+      return { prevQuestions, prevTopics };
     },
     onError: (_, __, ctx) => {
-      queryClient.setQueryData(['questions', topicId], ctx.prev);
-      queryClient.invalidateQueries({ queryKey: ['topics'] });
+      if (ctx?.prevQuestions) queryClient.setQueryData(['questions', topicId], ctx.prevQuestions);
+      if (ctx?.prevTopics) queryClient.setQueryData(['topics'], ctx.prevTopics);
     },
   });
 
@@ -79,8 +83,10 @@ export default function QuestionRow({ question, topicId, isLast }) {
   );
 
   const diffBadge = badge ? (
-    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold"
-      style={{ background: badge.background, color: badge.color, border: badge.border, boxShadow: badge.glow }}>
+    <span
+      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold"
+      style={{ background: badge.background, color: badge.color, border: badge.border, boxShadow: badge.glow }}
+    >
       {question.difficulty}
     </span>
   ) : null;
@@ -114,35 +120,67 @@ export default function QuestionRow({ question, topicId, isLast }) {
     </div>
   );
 
-  const rowStyle = {
-    borderBottom: !isLast ? `1px solid ${t.rowBorder}` : 'none',
-    opacity: question.completed ? 0.55 : 1,
-    transition: 'background 0.15s ease',
-  };
+  const dragHandle = (
+    <div
+      {...attributes}
+      {...listeners}
+      className="flex items-center justify-center w-5 flex-shrink-0"
+      style={{ cursor: isDragging ? 'grabbing' : 'grab', color: t.textMuted, opacity: 0.5, touchAction: 'none' }}
+      title="Drag to reorder"
+    >
+      <svg width="12" height="16" viewBox="0 0 12 16" fill="currentColor">
+        <circle cx="3" cy="3" r="1.5"/><circle cx="9" cy="3" r="1.5"/>
+        <circle cx="3" cy="8" r="1.5"/><circle cx="9" cy="8" r="1.5"/>
+        <circle cx="3" cy="13" r="1.5"/><circle cx="9" cy="13" r="1.5"/>
+      </svg>
+    </div>
+  );
 
   return (
     <>
-      {/* Desktop */}
       <div
-        className="hidden sm:grid sm:grid-cols-[2.5rem_1fr_7rem_5rem] gap-3 px-5 py-3.5 items-center"
-        style={rowStyle}
-        onMouseEnter={(e) => { e.currentTarget.style.background = t.bgHover; }}
-        onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
+        ref={setNodeRef}
+        style={{
+          transform: CSS.Transform.toString(transform),
+          transition,
+          borderBottom: !isLast ? `1px solid ${t.rowBorder}` : 'none',
+          opacity: isDragging ? 0.4 : question.completed ? 0.55 : 1,
+          background: isDragging ? t.bgHover : 'transparent',
+          zIndex: isDragging ? 999 : 'auto',
+          position: 'relative',
+        }}
+        onMouseEnter={(e) => { if (!isDragging) e.currentTarget.style.background = t.bgHover; }}
+        onMouseLeave={(e) => { if (!isDragging) e.currentTarget.style.background = isDragging ? t.bgHover : 'transparent'; }}
       >
-        <div className="flex justify-center">
-          <input type="checkbox" checked={question.completed} onChange={(e) => toggleComplete.mutate(e.target.checked)} className="custom-checkbox" />
+        {/* Desktop */}
+        <div className="hidden sm:grid sm:grid-cols-[1.5rem_2.5rem_1fr_7rem_5rem] gap-3 px-5 py-3.5 items-center">
+          {dragHandle}
+          <div className="flex justify-center">
+            <input
+              type="checkbox"
+              checked={question.completed}
+              onChange={(e) => toggleComplete.mutate(e.target.checked)}
+              className="custom-checkbox"
+            />
+          </div>
+          <div className="min-w-0 truncate">{titleEl}</div>
+          <div>{diffBadge}</div>
+          <div className="flex justify-center">{actionBtns}</div>
         </div>
-        <div className="min-w-0 truncate">{titleEl}</div>
-        <div>{diffBadge}</div>
-        <div className="flex justify-center">{actionBtns}</div>
-      </div>
 
-      {/* Mobile */}
-      <div className="sm:hidden flex items-start gap-3 px-4 py-3.5" style={rowStyle}>
-        <input type="checkbox" checked={question.completed} onChange={(e) => toggleComplete.mutate(e.target.checked)} className="custom-checkbox mt-0.5" />
-        <div className="flex-1 min-w-0">
-          <div className="mb-1.5 truncate">{titleEl}</div>
-          <div className="flex items-center gap-2">{diffBadge}{actionBtns}</div>
+        {/* Mobile */}
+        <div className="sm:hidden flex items-start gap-2 px-4 py-3.5">
+          <div className="mt-1">{dragHandle}</div>
+          <input
+            type="checkbox"
+            checked={question.completed}
+            onChange={(e) => toggleComplete.mutate(e.target.checked)}
+            className="custom-checkbox mt-0.5"
+          />
+          <div className="flex-1 min-w-0">
+            <div className="mb-1.5 truncate">{titleEl}</div>
+            <div className="flex items-center gap-2">{diffBadge}{actionBtns}</div>
+          </div>
         </div>
       </div>
 

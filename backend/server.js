@@ -11,8 +11,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/topics', topicsRouter);
 app.use('/api/topics', topicQuestionsRouter);
+app.use('/api/topics', topicsRouter);
 app.use('/api', questionsRouter);
 
 console.log("MONGO_URI:", process.env.MONGO_URI);

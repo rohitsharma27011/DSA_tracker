@@ -7,7 +7,7 @@ import { ThemeProvider } from './contexts/ThemeContext.jsx'
 
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: { staleTime: 0, retry: 1 },
+    queries: { staleTime: 30_000, refetchOnWindowFocus: false, retry: 1 },
   },
 })
 

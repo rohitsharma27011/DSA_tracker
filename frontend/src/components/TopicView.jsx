@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
+import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import client from '../api/client.js';
 import QuestionRow from './QuestionRow.jsx';
 import ProgressBar from './ProgressBar.jsx';
@@ -20,6 +22,9 @@ export default function TopicView({ topicId, topics }) {
   const [search, setSearch] = useState('');
   const [showAddQuestion, setShowAddQuestion] = useState(false);
   const { t } = useTheme();
+  const queryClient = useQueryClient();
+
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
 
   const topic = topics.find((tp) => tp._id === topicId);
 
@@ -28,6 +33,42 @@ export default function TopicView({ topicId, topics }) {
     queryFn: () => client.get(`/topics/${topicId}/questions`).then((r) => r.data),
     enabled: !!topicId,
   });
+
+  const reorderMutation = useMutation({
+    mutationFn: (orderedIds) => {
+      console.log('[reorder] sending to server:', orderedIds);
+      return client.put(`/topics/${topicId}/questions/reorder`, { orderedIds }).then((r) => r.data);
+    },
+    onMutate: async (orderedIds) => {
+      await queryClient.cancelQueries({ queryKey: ['questions', topicId] });
+      const prev = queryClient.getQueryData(['questions', topicId]);
+      console.log('[reorder] prev order:', prev?.map(q => q.title));
+      const map = new Map((prev || []).map((q) => [q._id, q]));
+      const next = orderedIds.map((id) => map.get(id)).filter(Boolean);
+      console.log('[reorder] optimistic order:', next.map(q => q.title));
+      queryClient.setQueryData(['questions', topicId], next);
+      return { prev };
+    },
+    onSuccess: (data) => {
+      console.log('[reorder] server confirmed:', data?.map(q => q.title));
+      queryClient.setQueryData(['questions', topicId], data);
+    },
+    onError: (err, __, ctx) => {
+      console.error('[reorder] error:', err);
+      queryClient.setQueryData(['questions', topicId], ctx.prev);
+    },
+  });
+
+  function handleDragEnd({ active, over }) {
+    console.log('[drag] active:', active?.id, 'over:', over?.id);
+    if (!over || active.id === over.id) return;
+    const oldIndex = questions.findIndex((q) => q._id === active.id);
+    const newIndex = questions.findIndex((q) => q._id === over.id);
+    console.log('[drag] oldIndex:', oldIndex, 'newIndex:', newIndex);
+    const reordered = arrayMove(questions, oldIndex, newIndex);
+    console.log('[drag] reordered titles:', reordered.map(q => q.title));
+    reorderMutation.mutate(reordered.map((q) => q._id));
+  }
 
   const filtered = questions.filter((q) => {
     const matchesDiff = filter === 'All' || q.difficulty === filter;
@@ -130,24 +171,38 @@ export default function TopicView({ topicId, topics }) {
           </p>
         </div>
       ) : (
-        <div
-          className="rounded-2xl overflow-hidden transition-all duration-300"
-          style={{ background: t.bgCard, border: `1px solid ${t.border}` }}
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
         >
-          {/* Header — desktop only */}
-          <div
-            className="hidden sm:grid sm:grid-cols-[2.5rem_1fr_7rem_5rem] gap-3 px-5 py-3 text-[10px] font-bold uppercase tracking-widest"
-            style={{ borderBottom: `1px solid ${t.border}`, color: t.tableHeaderText, background: t.bgCardHeader }}
-          >
-            <div />
-            <div>Title</div>
-            <div>Difficulty</div>
-            <div className="text-center">Actions</div>
-          </div>
-          {filtered.map((question, idx) => (
-            <QuestionRow key={question._id} question={question} topicId={topicId} isLast={idx === filtered.length - 1} />
-          ))}
-        </div>
+          <SortableContext items={questions.map((q) => q._id)} strategy={verticalListSortingStrategy}>
+            <div
+              className="rounded-2xl transition-all duration-300"
+              style={{ background: t.bgCard, border: `1px solid ${t.border}`, overflow: 'visible' }}
+            >
+              {/* Header — desktop only */}
+              <div
+                className="hidden sm:grid sm:grid-cols-[1.5rem_2.5rem_1fr_7rem_5rem] gap-3 px-5 py-3 text-[10px] font-bold uppercase tracking-widest"
+                style={{ borderBottom: `1px solid ${t.border}`, color: t.tableHeaderText, background: t.bgCardHeader }}
+              >
+                <div />
+                <div />
+                <div>Title</div>
+                <div>Difficulty</div>
+                <div className="text-center">Actions</div>
+              </div>
+              {filtered.map((question, idx) => (
+                <QuestionRow
+                  key={question._id}
+                  question={question}
+                  topicId={topicId}
+                  isLast={idx === filtered.length - 1}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
       )}
 
       {showAddQuestion && (

@@ -37,6 +37,32 @@ topicQuestionsRouter.post("/:topicId/questions", async (req, res) => {
   }
 });
 
+// PUT /api/topics/:topicId/questions/reorder
+topicQuestionsRouter.put("/:topicId/questions/reorder", async (req, res) => {
+  try {
+    const { orderedIds } = req.body;
+    if (!Array.isArray(orderedIds)) return res.status(400).json({ error: "orderedIds must be an array" });
+
+    const topic = await Topic.findById(req.params.topicId);
+    if (!topic) return res.status(404).json({ error: "Topic not found" });
+
+    const questionMap = new Map(topic.questions.map((q) => [q._id.toString(), q]));
+    const reordered = orderedIds.map((id) => questionMap.get(id)).filter(Boolean);
+
+    // Keep any questions not in orderedIds at the end (safety net)
+    const reorderedSet = new Set(orderedIds);
+    topic.questions.forEach((q) => {
+      if (!reorderedSet.has(q._id.toString())) reordered.push(q);
+    });
+
+    topic.questions = reordered;
+    await topic.save();
+    res.json(topic.questions);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Mounted at /api — handles standalone question routes
 export const questionsRouter = Router();
 
